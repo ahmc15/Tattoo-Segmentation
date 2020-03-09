@@ -102,8 +102,8 @@ def autotattoo(epochs,steps_epochs,batch_size,rodada):
 #     for row in ArquivoCSV:
 #         lista.append(row[0].split('\t'))
         #lista.append(row)
-print(lista[:])
-lista = lista[3:4]
+#print(lista[:])
+lista = lista[1:]
 for linha in lista:
     epocas = int(linha[0])
     passo = int(linha[1])
