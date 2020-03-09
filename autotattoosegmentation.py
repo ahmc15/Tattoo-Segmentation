@@ -76,31 +76,31 @@ def autotattoo(epochs,steps_epochs,batch_size,rodada):
     SalvarMetricas(hist,Diretorios)
 
 
-    path = 'C:/Users/Adm/Desktop/TattooSegmentation/test_frames/valid/'
-    files = os.listdir(path)
-
-    for file in files:
-        out = model.predict_segmentation(
-            inp="C:/Users/Adm/Desktop/TattooSegmentation/test_frames/valid/"+str(file),
-            out_fname=Diretorios[3]+str(file[:-4])+"out.png")
-        img=Image.open("C:/Users/Adm/Desktop/TattooSegmentation/test_frames/valid/"+str(file))
-        mask = Image.open(Diretorios[3]+str(file[:-4])+"out.png")
-        pixel = mask.load()
-        for i in range(img.size[0]):
-            for j in range(img.size[1]):
-                if pixel[i,j]==(207, 248, 132):
-                    pixel[i,j]=(1,1,1)
-                else:
-                    pixel[i,j]=(0,0,0)
-        img = numpy.asarray(img)
-        mask = numpy.asarray(mask)
-        final = Image.fromarray(img*mask, 'RGB')
-        final.save(Diretorios[4]+str(file[:-4])+"cut.jpg")
-lista=[]
-with open('parametros.csv') as csvfile:
-    ArquivoCSV=csv.reader(csvfile, delimiter=';')
-    for row in ArquivoCSV:
-        lista.append(row[0].split('\t'))
+#     path = 'C:/Users/Adm/Desktop/TattooSegmentation/test_frames/valid/'
+#     files = os.listdir(path)
+#
+#     for file in files:
+#         out = model.predict_segmentation(
+#             inp="C:/Users/Adm/Desktop/TattooSegmentation/test_frames/valid/"+str(file),
+#             out_fname=Diretorios[3]+str(file[:-4])+"out.png")
+#         img=Image.open("C:/Users/Adm/Desktop/TattooSegmentation/test_frames/valid/"+str(file))
+#         mask = Image.open(Diretorios[3]+str(file[:-4])+"out.png")
+#         pixel = mask.load()
+#         for i in range(img.size[0]):
+#             for j in range(img.size[1]):
+#                 if pixel[i,j]==(207, 248, 132):
+#                     pixel[i,j]=(1,1,1)
+#                 else:
+#                     pixel[i,j]=(0,0,0)
+#         img = numpy.asarray(img)
+#         mask = numpy.asarray(mask)
+#         final = Image.fromarray(img*mask, 'RGB')
+#         final.save(Diretorios[4]+str(file[:-4])+"cut.jpg")
+# lista=[]
+# with open('parametros.csv') as csvfile:
+#     ArquivoCSV=csv.reader(csvfile, delimiter=';')
+#     for row in ArquivoCSV:
+#         lista.append(row[0].split('\t'))
         #lista.append(row)
 print(lista[:])
 lista = lista[3:4]
