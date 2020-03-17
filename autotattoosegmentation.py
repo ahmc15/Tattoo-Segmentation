@@ -96,13 +96,13 @@ def autotattoo(epochs,steps_epochs,batch_size,rodada):
 #         mask = numpy.asarray(mask)
 #         final = Image.fromarray(img*mask, 'RGB')
 #         final.save(Diretorios[4]+str(file[:-4])+"cut.jpg")
-# lista=[]
-# with open('parametros.csv') as csvfile:
-#     ArquivoCSV=csv.reader(csvfile, delimiter=';')
-#     for row in ArquivoCSV:
-#         lista.append(row[0].split('\t'))
-        #lista.append(row)
-#print(lista[:])
+lista=[]
+with open('parametros.csv') as csvfile:
+    ArquivoCSV=csv.reader(csvfile, delimiter=';')
+    for row in ArquivoCSV:
+        lista.append(row[0].split('\t'))
+        lista.append(row)
+print(lista[:])
 lista = lista[1:]
 for linha in lista:
     epocas = int(linha[0])
