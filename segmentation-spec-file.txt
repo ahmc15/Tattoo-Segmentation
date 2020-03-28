@@ -1,0 +1,38 @@
+# This file may be used to create an environment using:
+# $ conda create --name <env> --file <this file>
+# platform: win-64
+@EXPLICIT
+https://repo.anaconda.com/pkgs/main/win-64/_tflow_1100_select-0.0.1-gpu.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/blas-1.0-mkl.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/cudatoolkit-9.0-1.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/icc_rt-2017.0.4-h97af966_0.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/intel-openmp-2019.0-118.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/vs2015_runtime-14.15.26706-h3a45250_0.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/cudnn-7.1.4-cuda9.0_0.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/mkl-2018.0.3-1.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/vc-14.1-h0510ff6_4.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/python-3.6.6-hea74fb7_0.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/zlib-1.2.11-h8395fce_2.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/astor-0.7.1-py36_0.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/certifi-2018.8.24-py36_1.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/gast-0.2.0-py36_0.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/libprotobuf-3.6.0-h1a1b453_0.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/markdown-2.6.11-py36_0.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/six-1.11.0-py36_1.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/termcolor-1.1.0-py36_1.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/werkzeug-0.14.1-py36_0.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/wincertstore-0.2-py36h7fe50ca_0.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/absl-py-0.4.1-py36_0.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/protobuf-3.6.0-py36he025d50_0.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/setuptools-39.1.0-py36_0.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/grpcio-1.12.1-py36h1a1b453_0.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/wheel-0.31.1-py36_0.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/pip-10.0.1-py36_0.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/mkl_fft-1.0.6-py36hdbbee80_0.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/mkl_random-1.0.1-py36h77b88f5_1.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/numpy-1.14.5-py36h9fa60d3_4.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/numpy-base-1.14.5-py36h5c71026_4.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/tensorboard-1.10.0-py36he025d50_0.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/tensorflow-base-1.10.0-gpu_py36h6e53903_0.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/tensorflow-1.10.0-gpu_py36h3514669_0.tar.bz2
+https://repo.anaconda.com/pkgs/main/win-64/tensorflow-gpu-1.10.0-hf154084_0.tar.bz2
