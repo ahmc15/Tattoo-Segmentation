@@ -1,48 +1,63 @@
 
 import csv
 from PIL import Image
-from numpy import mean
+import numpy as np
 import matplotlib.pyplot as plt
 
 def IOUfromCSV(fileString):
+    '''
+    Função que retira do arquivo CSV a métrica e as perdas do processo de
+    treinamento e validação.
+    #1
+        lê cada linha do arquivo CSV e separa o primeiro elemento de cada linha
+        como o elemento(string) de uma lista.
+    #2
+        Separa o elemento de cada lista nas vírgulas em diferentes string.
+    #3
+        elimina os colchetes que acompanham os números e transforma os strings
+        em float.
+    #RETORNA
+        Uma lista contendo 4 listas, sendo cada uma, uma das medidas.
+    '''
     lista=[]
     myFile = open(fileString, 'r')
     ArquivoCSV=csv.reader(myFile, delimiter=';')
+    #1
     for row in ArquivoCSV:
         lista.append(row[0].split('/t'))
-
+    #2
     IoU = lista[0][0].split(',')
     IoU_val = lista[1][0].split(',')
     loss = lista[2][0].split(',')
     loss_val = lista[3][0].split(',')
-
-    for i in range(len(IoU)):
-        IoU[i] = float(IoU[i][1:-1])
-        IoU_val[i] = float(IoU_val[i][1:-1])
-        loss[i] = float(loss[i][1:-1])
-        loss_val[i] = float(loss_val[i][1:-1])
+    #3
+    for count, item in enumerate(IoU):
+        IoU[count] = float(IoU[count][1:-1])
+        IoU_val[count] = float(IoU_val[count][1:-1])
+        loss[count] = float(loss[count][1:-1])
+        loss_val[count] = float(loss_val[count][1:-1])
 
     return [IoU,IoU_val,loss,loss_val]
-def listaNomeCSV101():
-    listaNomes=[]
-    for i in range(1,11):
-        listaNomes.append('C:/Users/Adm/Desktop/image-segmentation-keras-master/Resultados/ResultadosArquiteturaMetade/ResultadosEpocas100steps101batch8/'+str(i)+'Epocas100steps101batch8/Métricas/100epocas101steps8batch.csv')
-    return listaNomes
+# def listaNomeCSV101():
+#     listaNomes=[]
+#     for i in range(1,11):
+#         listaNomes.append('C:/Users/Adm/Desktop/image-segmentation-keras-master/Resultados/ResultadosArquiteturaMetade/ResultadosEpocas100steps101batch8/'+str(i)+'Epocas100steps101batch8/Métricas/100epocas101steps8batch.csv')
+#     return listaNomes
 def listaNomeCSV202():
     listaNomes=[]
-    for i in range(1,4):
-        listaNomes.append('C:/Users/Adm/Desktop/image-segmentation-keras-master/Resultados/learningrate0,001/'+str(i)+'Epocas200steps202batch4/Métricas/200epocas202steps4batch.csv')
-    return listaNomes
-def listaNomeCSV404():
-    listaNomes=[]
     for i in range(1,11):
-        listaNomes.append('C:/Users/Adm/Desktop/image-segmentation-keras-master/Resultados/ResultadosArquiteturaMetade/ResultadosEpocas100steps404batch2/'+str(i)+'Epocas100steps404batch2/Métricas/100epocas404steps2batch.csv')
+        listaNomes.append('C:/Users/Adm/Desktop/image-segmentation-keras-master/Resultados/lr0,0001momentum0,9/'+str(i)+'Epocas200steps801batch1/Métricas/200epocas801steps1batch.csv')
     return listaNomes
-def listaNomeCSV808():
-    listaNomes=[]
-    for i in range(1,11):
-        listaNomes.append('C:/Users/Adm/Desktop/image-segmentation-keras-master/Resultados/ResultadosArquiteturaMetade/ResultadosEpocas100steps808batch1/'+str(i)+'Epocas100steps808batch1/Métricas/100epocas808steps1batch.csv')
-    return listaNomes
+# def listaNomeCSV404():
+#     listaNomes=[]
+#     for i in range(1,11):
+#         listaNomes.append('C:/Users/Adm/Desktop/image-segmentation-keras-master/Resultados/ResultadosArquiteturaMetade/ResultadosEpocas100steps404batch2/'+str(i)+'Epocas100steps404batch2/Métricas/100epocas404steps2batch.csv')
+#     return listaNomes
+# def listaNomeCSV801():
+#     listaNomes=[]
+#     for i in range(1,11):
+#         listaNomes.append('C:/Users/Adm/Desktop/image-segmentation-keras-master/Resultados/'+str(i)+'Epocas200steps801batch1/Métricas/200epocas801steps1batch.csv')
+#     return listaNomes
 
 
 def MediaKfolds(listaNomes):
@@ -57,56 +72,66 @@ def MediaKfolds(listaNomes):
     lista9 = IOUfromCSV(listaNomes[8])
     lista10 = IOUfromCSV(listaNomes[9])
     IoU=[]
+    STDIoU=[]
     IoU_val=[]
+    STDIoU_val=[]
     loss=[]
+    STDloss=[]
     loss_val=[]
+    STDloss_val=[]
 
-    for i in range(len(lista1[0])):
-        IoU.append(sum([lista1[0][i],lista2[0][i],lista3[0][i],lista4[0][i],lista5[0][i],lista6[0][i],lista7[0][i],lista8[0][i],lista9[0][i],lista10[0][i]])/10)
+    for count, item in enumerate(lista1[0]):
+        IoU.append(sum([lista1[0][count],lista2[0][count],lista3[0][count],lista4[0][count],lista5[0][count],lista6[0][count],lista7[0][count],lista8[0][count],lista9[0][count],lista10[0][count]])/10)
+        STDIoU.append(np.std(np.array([lista1[0][count],lista2[0][count],lista3[0][count],lista4[0][count],lista5[0][count],lista6[0][count],lista7[0][count],lista8[0][count],lista9[0][count],lista10[0][count]])))
 
-        IoU_val.append(sum([lista1[1][i],lista2[1][i],lista3[1][i],lista4[1][i],lista5[1][i],lista6[1][i],lista7[1][i],lista8[1][i],lista9[1][i],lista10[1][i]])/10)
+        IoU_val.append(sum([lista1[1][count],lista2[1][count],lista3[1][count],lista4[1][count],lista5[1][count],lista6[1][count],lista7[1][count],lista8[1][count],lista9[1][count],lista10[1][count]])/10)
+        STDIoU_val.append(np.std(np.array([lista1[1][count],lista2[1][count],lista3[1][count],lista4[1][count],lista5[1][count],lista6[1][count],lista7[1][count],lista8[1][count],lista9[1][count],lista10[1][count]])))
 
-        loss.append(sum([lista1[2][i],lista2[2][i],lista3[2][i],lista4[2][i],lista5[2][i],lista6[2][i],lista7[2][i],lista8[2][i],lista9[2][i],lista10[2][i]])/10)
+        loss.append(sum([lista1[2][count],lista2[2][count],lista3[2][count],lista4[2][count],lista5[2][count],lista6[2][count],lista7[2][count],lista8[2][count],lista9[2][count],lista10[2][count]])/10)
+        STDloss.append(np.std(np.array([lista1[2][count],lista2[2][count],lista3[2][count],lista4[2][count],lista5[2][count],lista6[2][count],lista7[2][count],lista8[2][count],lista9[2][count],lista10[2][count]])))
 
-        loss_val.append(sum([lista1[3][i],lista2[3][i],lista3[3][i],lista4[3][i],lista5[3][i],lista6[3][i],lista7[3][i],lista8[3][i],lista9[3][i],lista10[3][i]])/10)
-    return [IoU,IoU_val,loss,loss_val]
+        loss_val.append(sum([lista1[3][count],lista2[3][count],lista3[3][count],lista4[3][count],lista5[3][count],lista6[3][count],lista7[3][count],lista8[3][count],lista9[3][count],lista10[3][count]])/10)
+        STDloss_val.append(np.std(np.array([lista1[3][count],lista2[3][count],lista3[3][count],lista4[3][count],lista5[3][count],lista6[3][count],lista7[3][count],lista8[3][count],lista9[3][count],lista10[3][count]])))
 
-listinha=listaNomeCSV101()
+    return [IoU, STDIoU, IoU_val, STDIoU_val, loss, STDloss, loss_val, STDloss_val]
+
+# listinha=listaNomeCSV101()
 X = MediaKfolds(listaNomeCSV202())
-# Y = MediaKfolds(listaNomeCSV404())
-# W = MediaKfolds(listaNomeCSV808())
-# Z = MediaKfolds(listaNomeCSV101())
-
+# # Y = MediaKfolds(listaNomeCSV404())
+# # W = MediaKfolds(listaNomeCSV801())
+# # Z = MediaKfolds(listaNomeCSV101())
+x = np.linspace(0, 1, 200)
 plt.figure(figsize=(10,8), dpi=120)
-# plt.plot(Y[0])
-# plt.plot(Y[1])
-plt.plot(X[0])
-plt.plot(X[1])
-# plt.plot(W[0])
-# plt.plot(W[1])
-# plt.plot(Z[0])
-# plt.plot(Z[1])
+# # plt.plot(Y[0])
+# # plt.plot(Y[1])
+# #plt.plot(X[0])
+plt.errorbar(x, X[0], X[1])
+plt.errorbar(x, X[2], X[3])
+# # plt.plot(W[0])
+# # plt.plot(W[1])
+# # plt.plot(Z[0])
+# # plt.plot(Z[1])
 plt.title('jaccard do Modelo')
 
 plt.ylabel('IoU')
 plt.xlabel('Épocas')
-# plt.legend(['Treino202', 'Validação202','Treino404', 'Validação404','Treino808', 'Validação808'], loc='upper left')
 plt.legend(['TreinoBatch4', 'ValidaçãoBatch4','TreinoBatch2', 'ValidaçãoBatch2','TreinoBatch1', 'ValidaçãoBatch1','TreinoBatch8', 'ValidaçãoBatch8'],loc='upper center', bbox_to_anchor=(0.5, 1.05),
           ncol=4, fancybox=True, shadow=True)
 # plt.show()
-plt.savefig('iouArq200')
+plt.savefig('iouArqoriginal_200_801_1error')
 plt.figure(figsize=(10,8))
-plt.plot(X[2])
-plt.plot(X[3])
-# plt.plot(Y[2])
-# plt.plot(Y[3])
-# plt.plot(W[2])
-# plt.plot(W[3])
-# plt.plot(Z[2])
-# plt.plot(Z[3])
+plt.errorbar(x, X[4], X[5])
+plt.errorbar(x, X[6], X[7])
+# # plt.plot(Y[2])
+# # plt.plot(Y[3])
+# # plt.plot(W[2])
+# # plt.plot(W[3])
+# # plt.plot(Z[2])
+# # plt.plot(Z[3])
 plt.title('Perda do Modelo')
 plt.ylabel('Perda')
 plt.xlabel('Épocas')
 plt.legend(['TreinoBatch4', 'ValidaçãoBatch4','TreinoBatch2', 'ValidaçãoBatch2','TreinoBatch1', 'ValidaçãoBatch1','TreinoBatch8', 'ValidaçãoBatch8'],loc='upper center', bbox_to_anchor=(0.5, 1.05),
           ncol=4, fancybox=True, shadow=True)
-plt.savefig('perdasArq200')
+# plt.show()
+plt.savefig('perdasArqoriginal_200_801_1error')
