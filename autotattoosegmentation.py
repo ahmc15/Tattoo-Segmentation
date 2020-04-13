@@ -33,7 +33,7 @@ def createDIR(epochs, steps_epochs,batch_size,rodada):
     PathResultados = os.path.join(parent_dir,created_dir)
     os.mkdir(PathResultados)
     Diretorios=[]
-    subpasta=['/Mascaras/', '/ImgSegmentadas/', '/Métricas/']
+    subpasta=['/Mascaras/', '/ImgSegmentadas/', '/Metricas/']
     for i in subpasta:
         PathFilhas  = PathResultados+i
         os.mkdir(PathFilhas)
