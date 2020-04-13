@@ -26,7 +26,8 @@ def createDIR(epochs, steps_epochs,batch_size,rodada):
         Métricas: as métricas de treinamento do modelo
 
     '''
-    parent_dir ="C:/Users/Adm/Desktop/image-segmentation-keras-master/Resultados/"
+    #parent_dir ="C:/Users/Adm/Desktop/image-segmentation-keras-master/Resultados/"
+    parent_dir ="/mnt/nas/AndreCosta/Tattoo-Segmentation/"
     created_dir = str(rodada)+"Epocas"+str(epochs)+"steps"+str(steps_epochs)+"batch"+str(batch_size)
 
     PathResultados = os.path.join(parent_dir,created_dir)
@@ -142,8 +143,8 @@ def autotattoo(epochs,batch_size,rodada):
     '''
     steps_epochs = math.ceil(801/batch_size)
     imgOutput_path=str(epochs)+'epocas'+str(steps_epochs)+'steps'+str(batch_size)+'batch'
-    PathKfolds = 'C:/Users/Adm/Desktop/Kfolds/'
-
+    #PathKfolds = 'C:/Users/Adm/Desktop/Kfolds/'
+    PathKfolds = '/mnt/nas/AndreCosta/Kfolds/'
     Diretorios = createDIR(epochs, steps_epochs,batch_size,rodada)
 
     optimizer_tattoo = SGD(lr=0.0001, momentum=0.99, nesterov=False)
