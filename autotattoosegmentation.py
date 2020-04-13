@@ -27,7 +27,7 @@ def createDIR(epochs, steps_epochs,batch_size,rodada):
 
     '''
     #parent_dir ="C:/Users/Adm/Desktop/image-segmentation-keras-master/Resultados/"
-    parent_dir ="/mnt/nas/AndreCosta/Tattoo-Segmentation/"
+    parent_dir ="/mnt/nas/AndreCosta/Tattoo-Segmentation/Resultados/"
     created_dir = str(rodada)+"Epocas"+str(epochs)+"steps"+str(steps_epochs)+"batch"+str(batch_size)
 
     PathResultados = os.path.join(parent_dir,created_dir)
