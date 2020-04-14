@@ -1,4 +1,5 @@
-#!/opt/conda/bin/python
+#/opt/conda/bin/python
+#!/usr/bin/env python3
 from keras_segmentation.models.unet import unet
 from keras_segmentation.models.segnet import vgg_segnet
 import os
