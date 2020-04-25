@@ -148,7 +148,7 @@ def autotattoo(epochs,batch_size,rodada):
     PathKfolds = '/mnt/nas/AndreCosta/Kfolds/'
     Diretorios = createDIR(epochs, steps_epochs,batch_size,rodada)
 
-    optimizer_tattoo = SGD(lr=0.0001, momentum=0.99, nesterov=False)
+    optimizer_tattoo = SGD(lr=0.00001, momentum=0.99, nesterov=False)
     model = unet(n_classes=2, input_height=416, input_width=608)
     hist=model.train(
         train_images =  PathKfolds+'fold'+str(rodada-1)+'/fold'+str(rodada-1)+'train/',
