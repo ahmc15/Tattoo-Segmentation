@@ -4,16 +4,23 @@
 from keras_segmentation.models.unet import unet
 from keras_segmentation.models.segnet import vgg_segnet
 
-from keras.backend.tensorflow_backend import set_session
-import tensorflow as tf
+#from keras.backend.tensorflow_backend import set_session
+#import tensorflow as tf
 #config = tf.ConfigProto()
-config = tf.compat.v1.ConfigProto()
-config.gpu_options.allow_growth = True  # dynamically grow the memory used on the GPU
+#config = tf.compat.v1.ConfigProto()
+#config.gpu_options.allow_growth = True  # dynamically grow the memory used on the GPU
 #config.log_device_placement = True  # to log device placement (on which device the operation ran)
-sess = tf.compat.v1.Session(config=config)
+#sess = tf.compat.v1.Session(config=config)
 #set_session(sess)  # set this TensorFlow session as the default session for Keras
-tf.compat.v1.keras.backend.set_session(sess)
-
+#tf.compat.v1.keras.backend.set_session(sess)
+import tensorflow as tf
+gpus = tf.config.experimental.list_physical_devices('GPU')
+if gpus:
+  try:
+    for gpu in gpus:
+      tf.config.experimental.set_memory_growth(gpu, True)
+  except RuntimeError as e:
+    print(e)
 import os
 import math
 from PIL import Image
