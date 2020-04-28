@@ -46,7 +46,8 @@ def IOUfromCSV(fileString):
 def listaNomeCSV202():
     listaNomes=[]
     for i in range(1,11):
-        listaNomes.append('C:/Users/Adm/Desktop/image-segmentation-keras-master/Resultados/lr0,0001momentum0,9/'+str(i)+'Epocas200steps801batch1/Métricas/200epocas801steps1batch.csv')
+        listaNomes.append('C:/Users/Adm/Desktop/Tattoo-Segmentation/Resultados/lr10-5momentum0,99batch8/'+str(i)+'Epocas200steps101batch8/Metricas/200epocas101steps8batch.csv')
+                            #C:\Users\Adm\Desktop\Tattoo-Segmentation\Resultados\lr10-5momentum0,99batch8
     return listaNomes
 # def listaNomeCSV404():
 #     listaNomes=[]
@@ -115,10 +116,10 @@ plt.title('jaccard do Modelo')
 
 plt.ylabel('IoU')
 plt.xlabel('Épocas')
-plt.legend(['TreinoBatch4', 'ValidaçãoBatch4','TreinoBatch2', 'ValidaçãoBatch2','TreinoBatch1', 'ValidaçãoBatch1','TreinoBatch8', 'ValidaçãoBatch8'],loc='upper center', bbox_to_anchor=(0.5, 1.05),
+plt.legend(['TreinoBatch8', 'ValidaçãoBatch8','TreinoBatch2', 'ValidaçãoBatch2','TreinoBatch1', 'ValidaçãoBatch1','TreinoBatch8', 'ValidaçãoBatch8'],loc='upper center', bbox_to_anchor=(0.5, 1.05),
           ncol=4, fancybox=True, shadow=True)
 # plt.show()
-plt.savefig('iouArqoriginal_200_801_1error')
+plt.savefig('C:/Users/Adm/Desktop/Tattoo-Segmentation/Resultados/lr10-5momentum0,99batch8/iouArqoriginal_200_101_8error.png')
 plt.figure(figsize=(10,8))
 plt.errorbar(x, X[4], X[5])
 plt.errorbar(x, X[6], X[7])
@@ -131,7 +132,7 @@ plt.errorbar(x, X[6], X[7])
 plt.title('Perda do Modelo')
 plt.ylabel('Perda')
 plt.xlabel('Épocas')
-plt.legend(['TreinoBatch4', 'ValidaçãoBatch4','TreinoBatch2', 'ValidaçãoBatch2','TreinoBatch1', 'ValidaçãoBatch1','TreinoBatch8', 'ValidaçãoBatch8'],loc='upper center', bbox_to_anchor=(0.5, 1.05),
+plt.legend(['TreinoBatch8', 'ValidaçãoBatch8','TreinoBatch2', 'ValidaçãoBatch2','TreinoBatch1', 'ValidaçãoBatch1','TreinoBatch8', 'ValidaçãoBatch8'],loc='upper center', bbox_to_anchor=(0.5, 1.05),
           ncol=4, fancybox=True, shadow=True)
 # plt.show()
-plt.savefig('perdasArqoriginal_200_801_1error')
+plt.savefig('C:/Users/Adm/Desktop/Tattoo-Segmentation/Resultados/lr10-5momentum0,99batch8/perdasArqoriginal_200_101_8error.png')
