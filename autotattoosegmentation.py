@@ -9,9 +9,10 @@ import tensorflow as tf
 #config = tf.ConfigProto()
 config = tf.compat.v1.ConfigProto()
 config.gpu_options.allow_growth = True  # dynamically grow the memory used on the GPU
-config.log_device_placement = True  # to log device placement (on which device the operation ran)
+#config.log_device_placement = True  # to log device placement (on which device the operation ran)
 sess = tf.compat.v1.Session(config=config)
-set_session(sess)  # set this TensorFlow session as the default session for Keras
+#set_session(sess)  # set this TensorFlow session as the default session for Keras
+tf.compat.v1.keras.backend.set_session(sess)
 
 import os
 import math
