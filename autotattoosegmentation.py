@@ -210,7 +210,7 @@ def main():
         for row in ArquivoCSV:
             Parametros.append(row[0].split('\t'))
 
-    Parametros = Parametros[1:]
+    Parametros = Parametros[6:]
     for linha in Parametros:
         epocas = int(linha[0])
         batch = int(linha[2])
