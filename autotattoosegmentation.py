@@ -179,7 +179,7 @@ def autotattoo(epochs,batch_size,rodada):
         steps_per_epoch=steps_epochs,
         batch_size=batch_size,
         optimizer_name=optimizer_tattoo,
-        do_augment=True)
+        do_augment=False)
 
     SalvarMetricas(hist,Diretorios,imgOutput_path,epochs)
     # pathImgTeste = 'C:/Users/Adm/Desktop/TattooSegmentation/test_frames/valid/'
@@ -210,7 +210,7 @@ def main():
         for row in ArquivoCSV:
             Parametros.append(row[0].split('\t'))
 
-    Parametros = Parametros[6:]
+    Parametros = Parametros[1:]
     for linha in Parametros:
         epocas = int(linha[0])
         batch = int(linha[2])
