@@ -14,10 +14,11 @@ if gpus:
   except RuntimeError as e:
     print(e)
 config = tf.compat.v1.ConfigProto()
-config.gpu_options.allow_growth = True  # dynamically grow the memory used on the GPU
-config.log_device_placement = True  # to log device placement (on which device the operation ran)
+#config.gpu_options.allow_growth = True  # dynamically grow the memory used on the GPU
+#config.log_device_placement = True  # to log device placement (on which device the operation ran)
+#sess = tf.compat.v1.Session(config=config)
+config = tf.compat.v1.ConfigProto(gpu_options=tf.GPUOptions(per_process_gpu_memory_fraction=0.8))
 sess = tf.compat.v1.Session(config=config)
-#set_session(sess)  # set this TensorFlow session as the default session for Keras
 tf.compat.v1.keras.backend.set_session(sess)
 
 import os
