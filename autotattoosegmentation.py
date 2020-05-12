@@ -180,7 +180,7 @@ def autotattoo(epochs,batch_size,rodada):
         steps_per_epoch=steps_epochs,
         batch_size=batch_size,
         optimizer_name=optimizer_tattoo,
-        do_augment=False)
+        do_augment=True)
 
     SalvarMetricas(hist,Diretorios,imgOutput_path,epochs)
     # pathImgTeste = 'C:/Users/Adm/Desktop/TattooSegmentation/test_frames/valid/'
