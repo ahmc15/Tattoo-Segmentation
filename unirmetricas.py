@@ -47,13 +47,13 @@ def listaNomeCSV202():
     listaNomes=[]
     for i in range(1,11):
         listaNomes.append('C:/Users/Adm/Desktop/Tattoo-Segmentation/Resultados/lr10-5momentum0,99batch8aug/'+str(i)+'Epocas200steps101batch8/Metricas/200epocas101steps8batch.csv')
-                            #C:\Users\Adm\Desktop\Tattoo-Segmentation\Resultados\lr10-5momentum0,99batch8
+
     return listaNomes
-def listaNomeCSV404():
-    listaNomes=[]
-    for i in range(1,11):
-        listaNomes.append('C:/Users/Adm/Desktop/Tattoo-Segmentation/Resultados/lr10-5momentum0,99batch8/'+str(i)+'Epocas200steps101batch8/Metricas/200epocas101steps8batch.csv')
-    return listaNomes
+# def listaNomeCSV404():
+#     listaNomes=[]
+#     for i in range(1,11):
+#         listaNomes.append('C:/Users/Adm/Desktop/Tattoo-Segmentation/Resultados/lr10-5momentum0,99batch8/'+str(i)+'Epocas200steps101batch8/Metricas/200epocas101steps8batch.csv')
+#     return listaNomes
 # def listaNomeCSV801():
 #     listaNomes=[]
 #     for i in range(1,11):
@@ -98,44 +98,47 @@ def MediaKfolds(listaNomes):
 
 # listinha=listaNomeCSV101()
 X = MediaKfolds(listaNomeCSV202())
-Y = MediaKfolds(listaNomeCSV404())
+# Y = MediaKfolds(listaNomeCSV404())
 # # W = MediaKfolds(listaNomeCSV801())
 # # Z = MediaKfolds(listaNomeCSV101())
 x = np.linspace(0, 1, 200)
 plt.figure(figsize=(10,8), dpi=120)
-plt.plot(Y[0])
-plt.plot(Y[2])
-plt.plot(X[0])
-plt.plot(X[2])
-# plt.errorbar(x, X[0], X[1])
-# plt.errorbar(x, X[2], X[3])
+# plt.plot(Y[0])
+# plt.plot(Y[2])
+# plt.plot(X[0])
+# plt.plot(X[2])
+plt.errorbar(x, X[0], X[1])
+plt.errorbar(x, X[2], X[3])
 # # plt.plot(W[0])
 # # plt.plot(W[1])
 # # plt.plot(Z[0])
 # # plt.plot(Z[1])
 plt.title('jaccard do Modelo')
-
+plt.ylim(0.1, 1.2)
+# plt.xlim(1, 401)
 plt.ylabel('IoU')
 plt.xlabel('Épocas')
 plt.legend(['TreinoBatch8', 'ValidaçãoBatch8','TreinoBatch8augmented', 'ValidaçãoBatch8augmented'],loc='upper center', bbox_to_anchor=(0.5, 1.05),
           ncol=4, fancybox=True, shadow=True)
 # plt.show()
-plt.savefig('C:/Users/Adm/Desktop/Tattoo-Segmentation/Resultados/lr10-5momentum0,99batch8aug/iouArqoriginal_200_101_8augComparision.png')
+plt.savefig('C:/Users/Adm/Desktop/Tattoo-Segmentation/Resultados/lr10-5momentum0,99Batch8aug/ERRORiouArqoriginal_200_101_8aug.png')
 plt.figure(figsize=(10,8))
-# plt.errorbar(x, X[4], X[5])
-# plt.errorbar(x, X[6], X[7])
-plt.plot(Y[4])
-plt.plot(Y[6])
-plt.plot(X[4])
-plt.plot(X[6])
+plt.errorbar(x, X[4], X[5])
+plt.errorbar(x, X[6], X[7])
+# plt.plot(Y[4])
+# plt.plot(Y[6])
+# plt.plot(X[4])
+# plt.plot(X[6])
 # # plt.plot(W[2])
 # # plt.plot(W[3])
 # # plt.plot(Z[2])
 # # plt.plot(Z[3])
 plt.title('Perda do Modelo')
+plt.ylim(0.1, 1.2)
+# plt.xlim(1, 410)
 plt.ylabel('Perda')
 plt.xlabel('Épocas')
 plt.legend(['TreinoBatch8', 'ValidaçãoBatch8','TreinoBatch8augmented', 'ValidaçãoBatch8augmented'],loc='upper center', bbox_to_anchor=(0.5, 1.05),
           ncol=4, fancybox=True, shadow=True)
 # plt.show()
-plt.savefig('C:/Users/Adm/Desktop/Tattoo-Segmentation/Resultados/lr10-5momentum0,99batch8aug/perdasArqoriginal_200_101_8augComparision.png')
+plt.savefig('C:/Users/Adm/Desktop/Tattoo-Segmentation/Resultados/lr10-5momentum0,99Batch8aug/ERRORperdasArqoriginal_200_101_8aug.png')
