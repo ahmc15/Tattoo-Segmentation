@@ -5,24 +5,25 @@ from keras_segmentation.models.unet import unet
 from keras_segmentation.models.segnet import vgg_segnet
 
 #from keras.backend.tensorflow_backend import set_session
-import tensorflow as tf
-gpus = tf.config.experimental.list_physical_devices('GPU')
-if gpus:
-  try:
-    for gpu in gpus:
-      tf.config.experimental.set_memory_growth(gpu, True)
-  except RuntimeError as e:
-    print(e)
-config = tf.compat.v1.ConfigProto()
-#config.gpu_options.allow_growth = True  # dynamically grow the memory used on the GPU
-#config.log_device_placement = True  # to log device placement (on which device the operation ran)
-#sess = tf.compat.v1.Session(config=config)
-config = tf.compat.v1.ConfigProto(gpu_options=tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.8))
-sess = tf.compat.v1.Session(config=config)
-tf.compat.v1.keras.backend.set_session(sess)
+# import tensorflow as tf
+# gpus = tf.config.experimental.list_physical_devices('GPU')
+# if gpus:
+#   try:
+#     for gpu in gpus:
+#       tf.config.experimental.set_memory_growth(gpu, True)
+#   except RuntimeError as e:
+#     print(e)
+# config = tf.compat.v1.ConfigProto()
+# #config.gpu_options.allow_growth = True  # dynamically grow the memory used on the GPU
+# #config.log_device_placement = True  # to log device placement (on which device the operation ran)
+# #sess = tf.compat.v1.Session(config=config)
+# config = tf.compat.v1.ConfigProto(gpu_options=tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.8))
+# sess = tf.compat.v1.Session(config=config)
+# tf.compat.v1.keras.backend.set_session(sess)
 
 import os
 import math
+import datetime
 from PIL import Image
 import numpy
 import matplotlib.pyplot as plt
@@ -53,7 +54,7 @@ def createDIR(epochs, steps_epochs,batch_size,rodada):
 
     PathResultados = os.path.join(parent_dir,created_dir)
     os.mkdir(PathResultados)
-    Diretorios=[]
+    Diretorios=[PathResultados]
     subpasta=['/Mascaras/', '/ImgSegmentadas/', '/Metricas/']
     for i in subpasta:
         PathFilhas  = PathResultados+i
@@ -82,7 +83,7 @@ def SalvarMetricas(dadosmodel,Diretorios,imgOutput_path,epochs):
         loss.append(dadosmodel[i].history['loss'])
 
     Metricas = [acc, val_acc,loss,val_loss]
-    csvFile = open(Diretorios[2]+imgOutput_path+'.csv', 'w')
+    csvFile = open(Diretorios[3]+imgOutput_path+'.csv', 'w')
     with csvFile:
         writer = csv.writer(csvFile, lineterminator='\n')
         writer.writerows(Metricas)
@@ -93,7 +94,7 @@ def SalvarMetricas(dadosmodel,Diretorios,imgOutput_path,epochs):
     plt.ylabel('Jaccard Distance')
     plt.xlabel('Épocas')
     plt.legend(['Treino', 'Validação'], loc='upper left')
-    plt.savefig(Diretorios[2]+'metrica')
+    plt.savefig(Diretorios[3]+'metrica')
     plt.figure()
     plt.plot(loss)
     plt.plot(val_loss)
@@ -101,7 +102,7 @@ def SalvarMetricas(dadosmodel,Diretorios,imgOutput_path,epochs):
     plt.ylabel('Perda')
     plt.xlabel('Épocas')
     plt.legend(['Treino', 'Validação'], loc='upper left')
-    plt.savefig(Diretorios[2]+'perdas') #salva as figuras da métrica e da perda de treinamento
+    plt.savefig(Diretorios[3]+'perdas') #salva as figuras da métrica e da perda de treinamento
 
 def predictTattoo(pathImg,Diretorios,modelo):
     '''
@@ -120,9 +121,9 @@ def predictTattoo(pathImg,Diretorios,modelo):
     for file in files:
         out = modelo.predict_segmentation(
             inp=pathImg+str(file),
-            out_fname=Diretorios[0]+str(file[:-4])+"out.png")
+            out_fname=Diretorios[1]+str(file[:-4])+"out.png")
         img=Image.open(pathImg+str(file))
-        mask = Image.open(Diretorios[0]+str(file[:-4])+"out.png")
+        mask = Image.open(Diretorios[1]+str(file[:-4])+"out.png")
         pixel = mask.load()
         for i in range(img.size[0]):
             for j in range(img.size[1]):
@@ -133,9 +134,9 @@ def predictTattoo(pathImg,Diretorios,modelo):
         img = numpy.asarray(img)
         mask = numpy.asarray(mask)
         final = Image.fromarray(img*mask, 'RGB')
-        final.save(Diretorios[1]+str(file[:-4])+"cut.jpg")
+        final.save(Diretorios[2]+str(file[:-4])+"cut.jpg")
 
-def autotattoo(epochs,batch_size,rodada):
+def autotattoo(epochs,batch_size,rodada, lr, momentum):
     '''
     Função de treinamento de um segmentador. Recebe como input:
     # Argumentos
@@ -164,11 +165,11 @@ def autotattoo(epochs,batch_size,rodada):
     '''
     steps_epochs = math.ceil(801/batch_size)
     imgOutput_path=str(epochs)+'epocas'+str(steps_epochs)+'steps'+str(batch_size)+'batch'
-    #PathKfolds = 'C:/Users/Adm/Desktop/Kfolds/'
+    # PathKfolds = 'C:/Users/Adm/Desktop/Kfolds/'
     PathKfolds = '/mnt/nas/AndreCosta/Kfolds/'
     Diretorios = createDIR(epochs, steps_epochs,batch_size,rodada)
 
-    optimizer_tattoo = SGD(lr=1e-5, momentum=0.9, nesterov=False)
+    optimizer_tattoo = SGD(lr=lr, momentum=momentum, nesterov=False)
     model = unet(n_classes=2, input_height=416, input_width=608)
     hist=model.train(
         train_images =  PathKfolds+'fold'+str(rodada-1)+'/fold'+str(rodada-1)+'train/',
@@ -205,18 +206,28 @@ def main():
         ...
         Parametros[5:7] faz o treinamento com o quinto e sexto fold.
     '''
+    startTimer = datetime.datetime.now()
     Parametros=[]
     with open('parametros.csv') as csvfile:
         ArquivoCSV=csv.reader(csvfile, delimiter=';')
         for row in ArquivoCSV:
             Parametros.append(row[0].split('\t'))
-
+    learningRate=1e-5
+    Momentum=0.9
     Parametros = Parametros[1:]
+
     for linha in Parametros:
         epocas = int(linha[0])
         batch = int(linha[2])
         rodada = int(linha[3])
-        autotattoo(epocas,batch,rodada)
+        autotattoo(epocas,batch,rodada, learningRate, Momentum)
+    endTimer = datetime.datetime.now()
+    Duration = endTimer-startTimer
+    file = open(Diretorios[0]+"parametros.txt","w+")
+    LINE = ['numero de epocas: '+str(epocas)+'\n','tamanho de batch: '+str(batch)+'\n','learning rate: '+str(learningRate)+ '\n',
+                'momentum: '+str(Momentum)+ '\n','run time: '+str(Duration)+ '\n'];
+    file.writelines(LINE)
+    file.close()
 
 if __name__ == "__main__":
     main()
