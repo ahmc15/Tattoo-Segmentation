@@ -1,8 +1,8 @@
-
 import csv
 from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 
 def IOUfromCSV(fileString):
     '''
@@ -38,107 +38,92 @@ def IOUfromCSV(fileString):
         loss_val[count] = float(loss_val[count][1:-1])
 
     return [IoU,IoU_val,loss,loss_val]
-# def listaNomeCSV101():
-#     listaNomes=[]
-#     for i in range(1,11):
-#         listaNomes.append('C:/Users/Adm/Desktop/image-segmentation-keras-master/Resultados/ResultadosArquiteturaMetade/ResultadosEpocas100steps101batch8/'+str(i)+'Epocas100steps101batch8/Métricas/100epocas101steps8batch.csv')
-#     return listaNomes
-def listaNomeCSV202():
+
+def listaNomeCSV(path):
+    '''
+    Função encontra todos os arquivos csv dentro dos sub diretórios de um
+    detereminado diretório.
+    Retorna uma lista com as paths dos arquivos CSV.
+    '''
     listaNomes=[]
-    for i in range(1,11):
-        listaNomes.append('C:/Users/Adm/Desktop/Tattoo-Segmentation/Resultados/lr10-5momentum0,99batch8aug/'+str(i)+'Epocas200steps101batch8/Metricas/200epocas101steps8batch.csv')
-
+    for root, dirs, files in os.walk(path):
+        for name in files:
+            if name.endswith((".csv")):
+                listaNomes.append(os.path.join(root,name))
     return listaNomes
-# def listaNomeCSV404():
-#     listaNomes=[]
-#     for i in range(1,11):
-#         listaNomes.append('C:/Users/Adm/Desktop/Tattoo-Segmentation/Resultados/lr10-5momentum0,99batch8/'+str(i)+'Epocas200steps101batch8/Metricas/200epocas101steps8batch.csv')
-#     return listaNomes
-# def listaNomeCSV801():
-#     listaNomes=[]
-#     for i in range(1,11):
-#         listaNomes.append('C:/Users/Adm/Desktop/image-segmentation-keras-master/Resultados/'+str(i)+'Epocas200steps801batch1/Métricas/200epocas801steps1batch.csv')
-#     return listaNomes
-
 
 def MediaKfolds(listaNomes):
-    lista1 = IOUfromCSV(listaNomes[0])
-    lista2 = IOUfromCSV(listaNomes[1])
-    lista3 = IOUfromCSV(listaNomes[2])
-    lista4 = IOUfromCSV(listaNomes[3])
-    lista5 = IOUfromCSV(listaNomes[4])
-    lista6 = IOUfromCSV(listaNomes[5])
-    lista7 = IOUfromCSV(listaNomes[6])
-    lista8 = IOUfromCSV(listaNomes[7])
-    lista9 = IOUfromCSV(listaNomes[8])
-    lista10 = IOUfromCSV(listaNomes[9])
-    IoU=[]
-    STDIoU=[]
-    IoU_val=[]
-    STDIoU_val=[]
-    loss=[]
-    STDloss=[]
-    loss_val=[]
-    STDloss_val=[]
-
-    for count, item in enumerate(lista1[0]):
-        IoU.append(sum([lista1[0][count],lista2[0][count],lista3[0][count],lista4[0][count],lista5[0][count],lista6[0][count],lista7[0][count],lista8[0][count],lista9[0][count],lista10[0][count]])/10)
-        STDIoU.append(np.std(np.array([lista1[0][count],lista2[0][count],lista3[0][count],lista4[0][count],lista5[0][count],lista6[0][count],lista7[0][count],lista8[0][count],lista9[0][count],lista10[0][count]])))
-
-        IoU_val.append(sum([lista1[1][count],lista2[1][count],lista3[1][count],lista4[1][count],lista5[1][count],lista6[1][count],lista7[1][count],lista8[1][count],lista9[1][count],lista10[1][count]])/10)
-        STDIoU_val.append(np.std(np.array([lista1[1][count],lista2[1][count],lista3[1][count],lista4[1][count],lista5[1][count],lista6[1][count],lista7[1][count],lista8[1][count],lista9[1][count],lista10[1][count]])))
-
-        loss.append(sum([lista1[2][count],lista2[2][count],lista3[2][count],lista4[2][count],lista5[2][count],lista6[2][count],lista7[2][count],lista8[2][count],lista9[2][count],lista10[2][count]])/10)
-        STDloss.append(np.std(np.array([lista1[2][count],lista2[2][count],lista3[2][count],lista4[2][count],lista5[2][count],lista6[2][count],lista7[2][count],lista8[2][count],lista9[2][count],lista10[2][count]])))
-
-        loss_val.append(sum([lista1[3][count],lista2[3][count],lista3[3][count],lista4[3][count],lista5[3][count],lista6[3][count],lista7[3][count],lista8[3][count],lista9[3][count],lista10[3][count]])/10)
-        STDloss_val.append(np.std(np.array([lista1[3][count],lista2[3][count],lista3[3][count],lista4[3][count],lista5[3][count],lista6[3][count],lista7[3][count],lista8[3][count],lista9[3][count],lista10[3][count]])))
+    '''
+    Retorna uma lista com as médias e os desvios padrões das métricas e perdas.
+    '''
+    Lista_CSV_Dados = list(map(IOUfromCSV,listaNomes))
+    for folds,item in enumerate(Lista_CSV_Dados):
+        if folds == 0:
+            iou_array=np.array(item[0])
+            iouval_array=np.array(item[1])
+            loss_array=np.array(item[2])
+            lossval_array=np.array(item[3])
+        else:
+            iou_array    =np.vstack((iou_array    ,np.array(item[0])))
+            iouval_array =np.vstack((iouval_array ,np.array(item[1])))
+            loss_array   =np.vstack((loss_array   ,np.array(item[2])))
+            lossval_array=np.vstack((lossval_array,np.array(item[3])))
+    IoU        =np.mean(iou_array,axis=0)
+    STDIoU     =np.std(iou_array,axis=0)
+    IoU_val    =np.mean(iouval_array,axis=0)
+    STDIoU_val =np.std(iouval_array,axis=0)
+    loss       =np.mean(loss_array,axis=0)
+    STDloss    =np.std(loss_array,axis=0)
+    loss_val   =np.mean(lossval_array,axis=0)
+    STDloss_val=np.std(lossval_array,axis=0)
 
     return [IoU, STDIoU, IoU_val, STDIoU_val, loss, STDloss, loss_val, STDloss_val]
 
-# listinha=listaNomeCSV101()
-X = MediaKfolds(listaNomeCSV202())
-# Y = MediaKfolds(listaNomeCSV404())
-# # W = MediaKfolds(listaNomeCSV801())
-# # Z = MediaKfolds(listaNomeCSV101())
-x = np.linspace(0, 1, 200)
+
+
+savepath = 'C:/Users/Adm/Desktop/Tattoo-Segmentation/Resultados/lr10-5momentum0,9batch8epocas1000/'
+X = MediaKfolds(listaNomeCSV(savepath))
+x = np.linspace(0, 1, 1000)
 plt.figure(figsize=(10,8), dpi=120)
-# plt.plot(Y[0])
-# plt.plot(Y[2])
-# plt.plot(X[0])
-# plt.plot(X[2])
-plt.errorbar(x, X[0], X[1])
-plt.errorbar(x, X[2], X[3])
-# # plt.plot(W[0])
-# # plt.plot(W[1])
-# # plt.plot(Z[0])
-# # plt.plot(Z[1])
+plt.plot(X[0])
+plt.plot(X[2])
 plt.title('jaccard do Modelo')
 plt.ylim(0.1, 1.2)
-# plt.xlim(1, 401)
 plt.ylabel('IoU')
 plt.xlabel('Épocas')
-plt.legend(['TreinoBatch8', 'ValidaçãoBatch8','TreinoBatch8augmented', 'ValidaçãoBatch8augmented'],loc='upper center', bbox_to_anchor=(0.5, 1.05),
+plt.legend(['Treino', 'Validação'],loc='upper center', bbox_to_anchor=(0.5, 1.05),
           ncol=4, fancybox=True, shadow=True)
-# plt.show()
-plt.savefig('C:/Users/Adm/Desktop/Tattoo-Segmentation/Resultados/lr10-5momentum0,99Batch8aug/ERRORiouArqoriginal_200_101_8aug.png')
+plt.savefig(savepath+'iou_1000_101_8aug.png')
+plt.figure(figsize=(10,8))
+plt.plot(X[4])
+plt.plot(X[6])
+plt.title('Perda do Modelo')
+plt.ylim(0.1, 1.2)
+plt.ylabel('Perda')
+plt.xlabel('Épocas')
+plt.legend(['Treino', 'Validação'],loc='upper center', bbox_to_anchor=(0.5, 1.05),
+          ncol=4, fancybox=True, shadow=True)
+plt.savefig(savepath+'perdas_1000_101_8aug.png')
+
+'''Gráfico com barras de erro '''
+
+plt.figure(figsize=(10,8), dpi=120)
+plt.errorbar(x, X[0], X[1])
+plt.errorbar(x, X[2], X[3])
+plt.title('jaccard do Modelo')
+plt.ylim(0.1, 1.2)
+plt.ylabel('IoU')
+plt.xlabel('Épocas')
+plt.legend(['Treino', 'Validação'],loc='upper center', bbox_to_anchor=(0.5, 1.05),
+          ncol=4, fancybox=True, shadow=True)
+plt.savefig(savepath+'ERRORiou_1000_101_8aug.png')
 plt.figure(figsize=(10,8))
 plt.errorbar(x, X[4], X[5])
 plt.errorbar(x, X[6], X[7])
-# plt.plot(Y[4])
-# plt.plot(Y[6])
-# plt.plot(X[4])
-# plt.plot(X[6])
-# # plt.plot(W[2])
-# # plt.plot(W[3])
-# # plt.plot(Z[2])
-# # plt.plot(Z[3])
 plt.title('Perda do Modelo')
 plt.ylim(0.1, 1.2)
-# plt.xlim(1, 410)
 plt.ylabel('Perda')
 plt.xlabel('Épocas')
-plt.legend(['TreinoBatch8', 'ValidaçãoBatch8','TreinoBatch8augmented', 'ValidaçãoBatch8augmented'],loc='upper center', bbox_to_anchor=(0.5, 1.05),
+plt.legend(['Treino', 'Validação'],loc='upper center', bbox_to_anchor=(0.5, 1.05),
           ncol=4, fancybox=True, shadow=True)
-# plt.show()
-plt.savefig('C:/Users/Adm/Desktop/Tattoo-Segmentation/Resultados/lr10-5momentum0,99Batch8aug/ERRORperdasArqoriginal_200_101_8aug.png')
+plt.savefig(savepath+'ERRORperdas_1000_101_8aug.png')
