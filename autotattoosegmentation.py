@@ -190,8 +190,8 @@ def autotattoo(epochs,batch_size,rodada, lr, momentum):
     endTimer = datetime.datetime.now()
     Duration = endTimer-startTimer
     file = open(Diretorios[0]+"parametros.txt","w+")
-    LINE = ['numero de epocas: '+str(epocas)+'\n','tamanho de batch: '+str(batch)+'\n','learning rate: '+str(learningRate)+ '\n',
-                'momentum: '+str(Momentum)+ '\n','run time: '+str(Duration)+ '\n'];
+    LINE = ['numero de epocas: '+str(epocas)+'\n','tamanho de batch: '+str(batch)+'\n','learning rate: '+str(lr)+ '\n',
+                'momentum: '+str(momentum)+ '\n','run time: '+str(Duration)+ '\n'];
     file.writelines(LINE)
     file.close()
 
