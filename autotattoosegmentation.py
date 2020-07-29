@@ -4,22 +4,22 @@
 from keras_segmentation.models.unet import unet
 from keras_segmentation.models.segnet import vgg_segnet
 
-#from keras.backend.tensorflow_backend import set_session
-# import tensorflow as tf
-# gpus = tf.config.experimental.list_physical_devices('GPU')
-# if gpus:
-#   try:
-#     for gpu in gpus:
-#       tf.config.experimental.set_memory_growth(gpu, True)
-#   except RuntimeError as e:
-#     print(e)
-# config = tf.compat.v1.ConfigProto()
-# #config.gpu_options.allow_growth = True  # dynamically grow the memory used on the GPU
-# #config.log_device_placement = True  # to log device placement (on which device the operation ran)
-# #sess = tf.compat.v1.Session(config=config)
-# config = tf.compat.v1.ConfigProto(gpu_options=tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.8))
-# sess = tf.compat.v1.Session(config=config)
-# tf.compat.v1.keras.backend.set_session(sess)
+from keras.backend.tensorflow_backend import set_session
+import tensorflow as tf
+gpus = tf.config.experimental.list_physical_devices('GPU')
+if gpus:
+  try:
+    for gpu in gpus:
+      tf.config.experimental.set_memory_growth(gpu, True)
+  except RuntimeError as e:
+    print(e)
+config = tf.compat.v1.ConfigProto()
+#config.gpu_options.allow_growth = True  # dynamically grow the memory used on the GPU
+#config.log_device_placement = True  # to log device placement (on which device the operation ran)
+#sess = tf.compat.v1.Session(config=config)
+config = tf.compat.v1.ConfigProto(gpu_options=tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.8))
+sess = tf.compat.v1.Session(config=config)
+tf.compat.v1.keras.backend.set_session(sess)
 
 import os
 import math
@@ -186,7 +186,8 @@ def autotattoo(epochs,batch_size,rodada, lr, momentum):
 
     SalvarMetricas(hist,Diretorios,imgOutput_path,epochs)
     # pathImgTeste = 'C:/Users/Adm/Desktop/TattooSegmentation/test_frames/valid/'
-    # predictTattoo(pathImgTeste,Diretorios,model)
+    pathImgTeste = "/mnt/nas/AndreCosta/Tattoo-Segmentation/Resultados/"
+    predictTattoo(pathImgTeste,Diretorios,model)
     endTimer = datetime.datetime.now()
     Duration = endTimer-startTimer
     file = open(Diretorios[0]+"parametros.txt","w+")
