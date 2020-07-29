@@ -163,6 +163,7 @@ def autotattoo(epochs,batch_size,rodada, lr, momentum):
 
     Função predictTattoo segmenta as imagens de teste.
     '''
+    startTimer = datetime.datetime.now()
     steps_epochs = math.ceil(801/batch_size)
     imgOutput_path=str(epochs)+'epocas'+str(steps_epochs)+'steps'+str(batch_size)+'batch'
     # PathKfolds = 'C:/Users/Adm/Desktop/Kfolds/'
@@ -186,7 +187,13 @@ def autotattoo(epochs,batch_size,rodada, lr, momentum):
     SalvarMetricas(hist,Diretorios,imgOutput_path,epochs)
     # pathImgTeste = 'C:/Users/Adm/Desktop/TattooSegmentation/test_frames/valid/'
     # predictTattoo(pathImgTeste,Diretorios,model)
-
+    endTimer = datetime.datetime.now()
+    Duration = endTimer-startTimer
+    file = open(Diretorios[0]+"parametros.txt","w+")
+    LINE = ['numero de epocas: '+str(epocas)+'\n','tamanho de batch: '+str(batch)+'\n','learning rate: '+str(learningRate)+ '\n',
+                'momentum: '+str(Momentum)+ '\n','run time: '+str(Duration)+ '\n'];
+    file.writelines(LINE)
+    file.close()
 
 
 def main():
@@ -206,7 +213,7 @@ def main():
         ...
         Parametros[5:7] faz o treinamento com o quinto e sexto fold.
     '''
-    startTimer = datetime.datetime.now()
+
     Parametros=[]
     with open('parametros.csv') as csvfile:
         ArquivoCSV=csv.reader(csvfile, delimiter=';')
@@ -221,13 +228,7 @@ def main():
         batch = int(linha[2])
         rodada = int(linha[3])
         autotattoo(epocas,batch,rodada, learningRate, Momentum)
-    endTimer = datetime.datetime.now()
-    Duration = endTimer-startTimer
-    file = open(Diretorios[0]+"parametros.txt","w+")
-    LINE = ['numero de epocas: '+str(epocas)+'\n','tamanho de batch: '+str(batch)+'\n','learning rate: '+str(learningRate)+ '\n',
-                'momentum: '+str(Momentum)+ '\n','run time: '+str(Duration)+ '\n'];
-    file.writelines(LINE)
-    file.close()
+
 
 if __name__ == "__main__":
     main()
