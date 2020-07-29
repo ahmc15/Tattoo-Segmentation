@@ -186,7 +186,7 @@ def autotattoo(epochs,batch_size,rodada, lr, momentum):
 
     SalvarMetricas(hist,Diretorios,imgOutput_path,epochs)
     # pathImgTeste = 'C:/Users/Adm/Desktop/TattooSegmentation/test_frames/valid/'
-    pathImgTeste = "/mnt/nas/AndreCosta/Tattoo-Segmentation/Resultados/"
+    pathImgTeste = "/mnt/nas/AndreCosta/Tattoo-Segmentation/valid/"
     predictTattoo(pathImgTeste,Diretorios,model)
     endTimer = datetime.datetime.now()
     Duration = endTimer-startTimer
