@@ -185,14 +185,16 @@ def autotattoo(epochs,batch_size,rodada, lr, momentum):
         do_augment=True)
 
     SalvarMetricas(hist,Diretorios,imgOutput_path,epochs)
+    endTimerTreino = datetime.datetime.now()
     # pathImgTeste = 'C:/Users/Adm/Desktop/TattooSegmentation/test_frames/valid/'
     pathImgTeste = "/mnt/nas/AndreCosta/Tattoo-Segmentation/valid/"
     predictTattoo(pathImgTeste,Diretorios,model)
-    endTimer = datetime.datetime.now()
-    Duration = endTimer-startTimer
+    endTimerTeste = datetime.datetime.now()
+    durationTreino = endTimerTreino-startTimer
+    durationTeste = endTimerTeste-endTimerTreino
     file = open(Diretorios[0]+"parametros.txt","w+")
     LINE = ['numero de epocas: '+str(epochs)+'\n','tamanho de batch: '+str(batch_size)+'\n','learning rate: '+str(lr)+ '\n',
-                'momentum: '+str(momentum)+ '\n','run time: '+str(Duration)+ '\n'];
+                'momentum: '+str(momentum)+ '\n','Duração treinamento: '+str(durationTreino)+ '\n','Duração teste: '+str(durationTeste)+ '\n'];
     file.writelines(LINE)
     file.close()
 
