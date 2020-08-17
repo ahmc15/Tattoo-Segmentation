@@ -222,7 +222,7 @@ def main():
             Parametros.append(row[0].split('\t'))
     learningRate=1e-5
     Momentum=0.9
-    Parametros = Parametros[1:]
+    Parametros = Parametros[3:]
 
     for linha in Parametros:
         epocas = int(linha[0])
