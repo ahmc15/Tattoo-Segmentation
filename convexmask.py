@@ -57,11 +57,15 @@ def mask_convexa(img_mask, img_tattoo):
     img = img*mask_bin
     return img
 
-name = 'pabloortiz81'
-path = 'D:/Resultados/5Epocas1000steps101batch8/Mascaras/'+name+'out.png'
-img = 'C:/Users/Adm/Desktop/TattooSegmentation/test_frames/valid/'+name+'.jpg'
-path = io.imread(path)
-img = io.imread(img)
-result =  mask_convexa(path,img)
-io.imshow(result)
-io.show()
+def main():
+    name = 'pabloortiz106'
+    path = 'D:/Resultados/5Epocas1000steps101batch8/Mascaras/'+name+'out.png'
+    img = 'C:/Users/Adm/Desktop/TattooSegmentation/test_frames/valid/'+name+'.jpg'
+    path = io.imread(path)
+    img = io.imread(img)
+    result =  mask_convexa(path,img)
+    io.imshow(result)
+    io.show()
+
+if __name__ == "__main__":
+    main()
