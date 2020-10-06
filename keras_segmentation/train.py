@@ -62,7 +62,7 @@ def jaccard_distance(y_true, y_pred, smooth=100):
     return (1 - jac) * smooth
 
 #####
-adadelta_tattoo = Adadelta(lr=0.001, rho=0.95)
+#adadelta_tattoo = Adadelta(lr=0.001, rho=0.95)
 
 ########
 def train(model,
@@ -82,7 +82,7 @@ def train(model,
           auto_resume_checkpoint=False,
           load_weights=None,
           steps_per_epoch=512,
-          optimizer_name='adadelta' , do_augment=False
+          optimizer_name=None , do_augment=False
           ):
 
     from .models.all_models import model_from_name
@@ -108,7 +108,7 @@ def train(model,
 
     if optimizer_name is not None:
         model.compile(loss='binary_crossentropy',
-                      optimizer=adadelta_tattoo,
+                      optimizer=optimizer_name,
                       metrics=[jaccard_distance])
 
     if checkpoints_path is not None:
