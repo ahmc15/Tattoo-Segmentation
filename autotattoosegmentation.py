@@ -8,16 +8,17 @@ from keras.backend.tensorflow_backend import set_session
 import tensorflow as tf
 gpus = tf.config.experimental.list_physical_devices('GPU')
 if gpus:
-  try:
-    for gpu in gpus:
-      tf.config.experimental.set_memory_growth(gpu, True)
-  except RuntimeError as e:
-    print(e)
+    try:
+        for gpu in gpus:
+            tf.config.experimental.set_memory_growth(gpu, True)
+    except RuntimeError as e:
+        print(e)
 config = tf.compat.v1.ConfigProto()
-#config.gpu_options.allow_growth = True  # dynamically grow the memory used on the GPU
-#config.log_device_placement = True  # to log device placement (on which device the operation ran)
+# config.gpu_options.allow_growth = True  # dynamically grow the memory used on the GPU
+# config.log_device_placement = True  # to log device placement (on which device the operation ran)
 #sess = tf.compat.v1.Session(config=config)
-config = tf.compat.v1.ConfigProto(gpu_options=tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.8))
+config = tf.compat.v1.ConfigProto(
+    gpu_options=tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.8))
 sess = tf.compat.v1.Session(config=config)
 tf.compat.v1.keras.backend.set_session(sess)
 
@@ -32,7 +33,7 @@ from keras.optimizers import Adadelta
 from keras.optimizers import SGD
 
 
-def createDIR(epochs, steps_epochs,batch_size,rodada):
+def createDIR(epochs, steps_epochs, batch_size, rodada):
     '''
     Função utilizada para criar o diretório no qual serão salvos os resultados
     de cada treinamento.
@@ -49,20 +50,21 @@ def createDIR(epochs, steps_epochs,batch_size,rodada):
 
     '''
     #parent_dir ="C:/Users/Adm/Desktop/image-segmentation-keras-master/Resultados/"
-    parent_dir ="/mnt/nas/AndreCosta/Tattoo-Segmentation/Resultados/"
+    parent_dir = "/mnt/nas/AndreCosta/Tattoo-Segmentation/Resultados/"
     created_dir = str(rodada)+"Epocas"+str(epochs)+"steps"+str(steps_epochs)+"batch"+str(batch_size)
 
-    PathResultados = os.path.join(parent_dir,created_dir)
+    PathResultados = os.path.join(parent_dir, created_dir)
     os.mkdir(PathResultados)
-    Diretorios=[PathResultados]
-    subpasta=['/Mascaras/', '/ImgSegmentadas/', '/Metricas/']
+    Diretorios = [PathResultados]
+    subpasta = ['/Mascaras/', '/ImgSegmentadas/', '/Metricas/']
     for i in subpasta:
-        PathFilhas  = PathResultados+i
+        PathFilhas = PathResultados+i
         os.mkdir(PathFilhas)
         Diretorios.append(PathFilhas)
-    return(Diretorios) #cria os diretórios onde serão salvos os resultados
+    return(Diretorios)  # cria os diretórios onde serão salvos os resultados
 
-def SalvarMetricas(dadosmodel,Diretorios,imgOutput_path,epochs):
+
+def SalvarMetricas(dadosmodel, Diretorios, imgOutput_path, epochs):
     '''
     Função que exporta a métrica e a perda de treinamento e de validação para o
     terceiro diretório da Lista "Diretorios".
@@ -72,17 +74,17 @@ def SalvarMetricas(dadosmodel,Diretorios,imgOutput_path,epochs):
     Além disso, salva os gráficos da Métrica pelas Épocas e da Perda pelas Épocas
     em formato png.
     '''
-    acc=[]
-    val_acc=[]
-    loss=[]
-    val_loss=[]
+    acc = []
+    val_acc = []
+    loss = []
+    val_loss = []
     for i in range(epochs):
         acc.append(dadosmodel[i].history['jaccard_distance'])
         val_acc.append(dadosmodel[i].history['val_jaccard_distance'])
         val_loss.append(dadosmodel[i].history['val_loss'])
         loss.append(dadosmodel[i].history['loss'])
 
-    Metricas = [acc, val_acc,loss,val_loss]
+    Metricas = [acc, val_acc, loss, val_loss]
     csvFile = open(Diretorios[3]+imgOutput_path+'.csv', 'w')
     with csvFile:
         writer = csv.writer(csvFile, lineterminator='\n')
@@ -102,9 +104,10 @@ def SalvarMetricas(dadosmodel,Diretorios,imgOutput_path,epochs):
     plt.ylabel('Perda')
     plt.xlabel('Épocas')
     plt.legend(['Treino', 'Validação'], loc='upper left')
-    plt.savefig(Diretorios[3]+'perdas') #salva as figuras da métrica e da perda de treinamento
+    plt.savefig(Diretorios[3]+'perdas')  # salva as figuras da métrica e da perda de treinamento
 
-def predictTattoo(pathImg,Diretorios,modelo):
+
+def predictTattoo(pathImg, Diretorios, modelo):
     '''
     Função que faz a predição das máscaras e faz a exportação das imagens
     sobrepostas com as respectivas máscaras.
@@ -122,21 +125,55 @@ def predictTattoo(pathImg,Diretorios,modelo):
         out = modelo.predict_segmentation(
             inp=pathImg+str(file),
             out_fname=Diretorios[1]+str(file[:-4])+"out.png")
-        img=Image.open(pathImg+str(file))
+        img = Image.open(pathImg+str(file))
         mask = Image.open(Diretorios[1]+str(file[:-4])+"out.png")
         pixel = mask.load()
         for i in range(img.size[0]):
             for j in range(img.size[1]):
-                if pixel[i,j]==(207, 248, 132):
-                    pixel[i,j]=(1,1,1)
+                if pixel[i, j] == (207, 248, 132):
+                    pixel[i, j] = (1, 1, 1)
                 else:
-                    pixel[i,j]=(0,0,0)
+                    pixel[i, j] = (0, 0, 0)
         img = numpy.asarray(img)
         mask = numpy.asarray(mask)
         final = Image.fromarray(img*mask, 'RGB')
         final.save(Diretorios[2]+str(file[:-4])+"cut.jpg")
 
-def autotattoo(epochs,batch_size,rodada, lr, momentum):
+
+def predictArtist(pathArtist, modelo):
+    '''
+    Função que faz a predição das máscaras e faz a exportação das imagens
+    sobrepostas com as respectivas máscaras.
+
+    A função cria uma lista com as imagens presentes no diretório "pathImg". Para
+    cada imagem, é feito a predição de uma máscara da tatuagem que é salva em
+    formato png. Em seguida, são lidas os pares de imagens e máscaras. è feita
+    uma trasnformação no valor dos pixels da máscara para poder multiplicar as
+    imagens e as máscaras. Dessa forma, apenas o conteúdo predito como tatuagem
+    é mostrado na imagem segmentada. A imagem segmentada é exportada em formato
+    JPEG.
+    '''
+    files = os.listdir(pathArtist)
+    for file in files:
+        out = modelo.predict_segmentation(
+            inp=pathArtist+str(file),
+            out_fname=pathArtist+'mascara/'+str(file[:-4])+"out.png")
+        img = Image.open(pathArtist+str(file))
+        mask = Image.open(pathArtist+'mascara/'+str(file[:-4])+"out.png")
+        pixel = mask.load()
+        for i in range(img.size[0]):
+            for j in range(img.size[1]):
+                if pixel[i, j] == (207, 248, 132):
+                    pixel[i, j] = (1, 1, 1)
+                else:
+                    pixel[i, j] = (0, 0, 0)
+        img = numpy.asarray(img)
+        mask = numpy.asarray(mask)
+        final = Image.fromarray(img*mask, 'RGB')
+        final.save(pathArtist+'mascara/'+str(file[:-4])+"cut.jpg")
+
+
+def autotattoo(epochs, batch_size, rodada, lr, momentum):
     '''
     Função de treinamento de um segmentador. Recebe como input:
     # Argumentos
@@ -165,36 +202,36 @@ def autotattoo(epochs,batch_size,rodada, lr, momentum):
     '''
     startTimer = datetime.datetime.now()
     steps_epochs = math.ceil(801/batch_size)
-    imgOutput_path=str(epochs)+'epocas'+str(steps_epochs)+'steps'+str(batch_size)+'batch'
+    imgOutput_path = str(epochs)+'epocas'+str(steps_epochs)+'steps'+str(batch_size)+'batch'
     # PathKfolds = 'C:/Users/Adm/Desktop/Kfolds/'
     PathKfolds = '/mnt/nas/AndreCosta/Kfolds/'
-    Diretorios = createDIR(epochs, steps_epochs,batch_size,rodada)
+    Diretorios = createDIR(epochs, steps_epochs, batch_size, rodada)
 
     optimizer_tattoo = SGD(lr=lr, momentum=momentum, nesterov=False)
     model = unet(n_classes=2, input_height=416, input_width=608)
-    hist=model.train(
-        train_images =  PathKfolds+'fold'+str(rodada-1)+'/fold'+str(rodada-1)+'train/',
-        train_annotations = PathKfolds+'fold'+str(rodada-1)+'/fold'+str(rodada-1)+'trainmask/',
+    hist = model.train(
+        train_images=PathKfolds+'fold'+str(rodada-1)+'/fold'+str(rodada-1)+'train/',
+        train_annotations=PathKfolds+'fold'+str(rodada-1)+'/fold'+str(rodada-1)+'trainmask/',
         epochs=epochs,
-        val_images = PathKfolds+'fold'+str(rodada-1)+'/fold'+str(rodada-1)+'validmask/',
-        val_annotations = PathKfolds+'fold'+str(rodada-1)+'/fold'+str(rodada-1)+'validmask/',
-        validate = True,
+        val_images=PathKfolds+'fold'+str(rodada-1)+'/fold'+str(rodada-1)+'validmask/',
+        val_annotations=PathKfolds+'fold'+str(rodada-1)+'/fold'+str(rodada-1)+'validmask/',
+        validate=True,
         steps_per_epoch=steps_epochs,
         batch_size=batch_size,
         optimizer_name=optimizer_tattoo,
         do_augment=True)
 
-    SalvarMetricas(hist,Diretorios,imgOutput_path,epochs)
+    SalvarMetricas(hist, Diretorios, imgOutput_path, epochs)
     endTimerTreino = datetime.datetime.now()
     # pathImgTeste = 'C:/Users/Adm/Desktop/TattooSegmentation/test_frames/valid/'
     pathImgTeste = "/mnt/nas/AndreCosta/Tattoo-Segmentation/valid/"
-    predictTattoo(pathImgTeste,Diretorios,model)
+    predictTattoo(pathImgTeste, Diretorios, model)
     endTimerTeste = datetime.datetime.now()
     durationTreino = endTimerTreino-startTimer
     durationTeste = endTimerTeste-endTimerTreino
-    file = open(Diretorios[0]+"parametros.txt","w+")
-    LINE = ['numero de epocas: '+str(epochs)+'\n','tamanho de batch: '+str(batch_size)+'\n','learning rate: '+str(lr)+ '\n',
-                'momentum: '+str(momentum)+ '\n','Duração treinamento: '+str(durationTreino)+ '\n','Duração teste: '+str(durationTeste)+ '\n'];
+    file = open(Diretorios[0]+"parametros.txt", "w+")
+    LINE = ['numero de epocas: '+str(epochs)+'\n', 'tamanho de batch: '+str(batch_size)+'\n', 'learning rate: '+str(lr) + '\n',
+            'momentum: '+str(momentum) + '\n', 'Duração treinamento: '+str(durationTreino) + '\n', 'Duração teste: '+str(durationTeste) + '\n']
     file.writelines(LINE)
     file.close()
 
@@ -217,20 +254,20 @@ def main():
         Parametros[5:7] faz o treinamento com o quinto e sexto fold.
     '''
 
-    Parametros=[]
+    Parametros = []
     with open('parametros.csv') as csvfile:
-        ArquivoCSV=csv.reader(csvfile, delimiter=';')
+        ArquivoCSV = csv.reader(csvfile, delimiter=';')
         for row in ArquivoCSV:
             Parametros.append(row[0].split('\t'))
-    learningRate=1e-5
-    Momentum=0.9
+    learningRate = 1e-5
+    Momentum = 0.9
     Parametros = Parametros[3:]
 
     for linha in Parametros:
         epocas = int(linha[0])
         batch = int(linha[2])
         rodada = int(linha[3])
-        autotattoo(epocas,batch,rodada, learningRate, Momentum)
+        autotattoo(epocas, batch, rodada, learningRate, Momentum)
 
 
 if __name__ == "__main__":
