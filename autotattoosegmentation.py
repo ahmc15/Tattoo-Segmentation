@@ -170,7 +170,7 @@ def predictArtist(pathArtist, modelo):
         img = numpy.asarray(img)
         mask = numpy.asarray(mask)
         final = Image.fromarray(img*mask, 'RGB')
-        final.save(pathArtist+'mascara/'+str(file[:-4])+"cut.jpg")
+        final.save(pathArtist+'segmentadas/'+str(file[:-4])+"cut.jpg")
 
 
 def autotattoo(epochs, batch_size, rodada, lr, momentum):
@@ -234,6 +234,13 @@ def autotattoo(epochs, batch_size, rodada, lr, momentum):
             'momentum: '+str(momentum) + '\n', 'Duração treinamento: '+str(durationTreino) + '\n', 'Duração teste: '+str(durationTeste) + '\n']
     file.writelines(LINE)
     file.close()
+    predictArtist("/mnt/nas/AndreCosta/tatuadores/Arzabe/", model)
+    predictArtist("/mnt/nas/AndreCosta/tatuadores/Dynoz/", model)
+    predictArtist("/mnt/nas/AndreCosta/tatuadores/Krish/", model)
+    predictArtist("/mnt/nas/AndreCosta/tatuadores/ManuRaccoon/", model)
+    predictArtist("/mnt/nas/AndreCosta/tatuadores/MattBackerich/", model)
+    predictArtist("/mnt/nas/AndreCosta/tatuadores/MikeRudenball/", model)
+    predictArtist("/mnt/nas/AndreCosta/tatuadores/PabloOrtiz/", model)
 
 
 def main():
