@@ -234,13 +234,13 @@ def autotattoo(epochs, batch_size, rodada, lr, momentum):
             'momentum: '+str(momentum) + '\n', 'Duração treinamento: '+str(durationTreino) + '\n', 'Duração teste: '+str(durationTeste) + '\n']
     file.writelines(LINE)
     file.close()
-    predictArtist("/mnt/nas/AndreCosta/tatuadores/Arzabe/", model)
-    predictArtist("/mnt/nas/AndreCosta/tatuadores/Dynoz/", model)
-    predictArtist("/mnt/nas/AndreCosta/tatuadores/Krish/", model)
-    predictArtist("/mnt/nas/AndreCosta/tatuadores/ManuRaccoon/", model)
-    predictArtist("/mnt/nas/AndreCosta/tatuadores/MattBackerich/", model)
-    predictArtist("/mnt/nas/AndreCosta/tatuadores/MikeRudenball/", model)
-    predictArtist("/mnt/nas/AndreCosta/tatuadores/PabloOrtiz/", model)
+    #predictArtist("/mnt/nas/AndreCosta/testetatuadores/Arzabe/", model)
+    predictArtist("/mnt/nas/AndreCosta/testetatuadores/Dynoz/", model)
+    predictArtist("/mnt/nas/AndreCosta/testetatuadores/Krish/", model)
+    predictArtist("/mnt/nas/AndreCosta/testetatuadores/ManuRaccoon/", model)
+    predictArtist("/mnt/nas/AndreCosta/testetatuadores/MattBackerich/", model)
+    predictArtist("/mnt/nas/AndreCosta/testetatuadores/MikeRudenball/", model)
+    predictArtist("/mnt/nas/AndreCosta/testetatuadores/PabloOrtiz/", model)
 
 
 def main():
@@ -268,7 +268,7 @@ def main():
             Parametros.append(row[0].split('\t'))
     learningRate = 1e-5
     Momentum = 0.9
-    Parametros = Parametros[3:]
+    Parametros = Parametros[1:2]
 
     for linha in Parametros:
         epocas = int(linha[0])
