@@ -155,22 +155,25 @@ def predictArtist(pathArtist, modelo):
     '''
     files = os.listdir(pathArtist)
     for file in files:
-        out = modelo.predict_segmentation(
-            inp=pathArtist+str(file),
-            out_fname=pathArtist+'mascara/'+str(file[:-4])+"out.png")
-        img = Image.open(pathArtist+str(file))
-        mask = Image.open(pathArtist+'mascara/'+str(file[:-4])+"out.png")
-        pixel = mask.load()
-        for i in range(img.size[0]):
-            for j in range(img.size[1]):
-                if pixel[i, j] == (207, 248, 132):
-                    pixel[i, j] = (1, 1, 1)
-                else:
-                    pixel[i, j] = (0, 0, 0)
-        img = numpy.asarray(img)
-        mask = numpy.asarray(mask)
-        final = Image.fromarray(img*mask, 'RGB')
-        final.save(pathArtist+'segmentadas/'+str(file[:-4])+"cut.jpg")
+        try:
+            out = modelo.predict_segmentation(
+                inp=pathArtist+str(file),
+                out_fname=pathArtist+'mascara/'+str(file[:-4])+"out.png")
+            img = Image.open(pathArtist+str(file))
+            mask = Image.open(pathArtist+'mascara/'+str(file[:-4])+"out.png")
+            pixel = mask.load()
+            for i in range(img.size[0]):
+                for j in range(img.size[1]):
+                    if pixel[i, j] == (207, 248, 132):
+                        pixel[i, j] = (1, 1, 1)
+                    else:
+                        pixel[i, j] = (0, 0, 0)
+            img = numpy.asarray(img)
+            mask = numpy.asarray(mask)
+            final = Image.fromarray(img*mask, 'RGB')
+            final.save(pathArtist+'segmentadas/'+str(file[:-4])+"cut.jpg")
+        expect:
+            continue
 
 
 def autotattoo(epochs, batch_size, rodada, lr, momentum):
